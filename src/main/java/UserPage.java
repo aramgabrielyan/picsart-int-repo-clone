@@ -16,11 +16,10 @@ public class UserPage extends BasePage {
     }
 
     private By likeLocation = By.cssSelector("[class*='c-dynamic-tooltip'] [data-photo-id='349802346077201']");
-    private By userPhotoGrid = By.cssSelector("[data-js-analytics-page='user_profile']");
     private By image = By.cssSelector("figure[class*='c-preview']");
 
     public void moveToImage() {
-        WaitHelper.getInstance().waitForElementDisplayed(userPhotoGrid);
+        WaitHelper.getInstance().waitForElementDisplayed(image);
         Actions actions = new Actions(driver);
         List<WebElement> imagesList = findAll(image);
         actions.moveToElement(imagesList.get(0)).build().perform();
