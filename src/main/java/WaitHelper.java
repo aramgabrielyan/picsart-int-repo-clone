@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import static setup.DriverSetup.getDriver;
 
 public class WaitHelper {
-    private final static int DEFAULT_TIMEOUT = 10;
+    private final static int DEFAULT_TIMEOUT = 40;
 
     public static WaitHelper getInstance() {
         return new WaitHelper();
