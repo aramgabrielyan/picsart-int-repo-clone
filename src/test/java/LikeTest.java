@@ -18,7 +18,7 @@ public class LikeTest extends TestBase {
         getDriver().manage().addCookie(cookieSid);
         getDriver().navigate().refresh();
 
-        userPage.openImage();
+        userPage.moveToImage();
         if(!userPage.isImageLiked()){
             userPage.moveToLikeButton();
         }

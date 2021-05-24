@@ -15,23 +15,15 @@ public class UserPage extends BasePage {
         open(getUrl());
     }
 
-   //private By likeLocation = By.cssSelector("i[class*='c-like-button']");
     private By likeLocation = By.cssSelector("[class*='c-dynamic-tooltip'] [data-photo-id='349802346077201']");
     private By userPhotoGrid = By.cssSelector("[data-js-analytics-page='user_profile']");
-    //private By image = By.cssSelector("[class*='img-wrapper']");
     private By image = By.cssSelector("figure[class*='c-preview']");
 
-    public void openImage() {
+    public void moveToImage() {
         WaitHelper.getInstance().waitForElementDisplayed(userPhotoGrid);
         Actions actions = new Actions(driver);
         List<WebElement> imagesList = findAll(image);
-        // click(imagesList.get(0));
         actions.moveToElement(imagesList.get(0)).build().perform();
-    }
-
-    public void clickLikeButton() {
-        WaitHelper.getInstance().waitForElementDisplayed(likeLocation);
-        click(likeLocation);
     }
 
     public boolean isImageLiked() {
@@ -43,6 +35,5 @@ public class UserPage extends BasePage {
         Actions actions = new Actions(driver);
         actions.moveToElement(find(likeLocation)).click().build().perform();
     }
-
 
 }
