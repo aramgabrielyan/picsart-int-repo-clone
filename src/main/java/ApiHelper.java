@@ -2,12 +2,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import okhttp3.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
 public class ApiHelper {
 
-    private static String generatedText = UUID.randomUUID().toString();
+    private static final String generatedText = UUID.randomUUID().toString();
+
+    public ApiHelper() {
+    }
 
     public static JsonObject createUser() throws IOException {
         OkHttpClient client = new OkHttpClient().newBuilder()
@@ -24,12 +28,62 @@ public class ApiHelper {
         Response response = client.newCall(request).execute();
         String jsonString = response.body().string();
         return JsonParser.parseString(jsonString).getAsJsonObject();
-
-
     }
 
     public static void main(String[] args) throws IOException {
         createUser();
     }
+
+
+    public static void deleteUser(String userKey) throws IOException {
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType, "");
+        Request request = new Request.Builder()
+                .url("https://api.picsart.com/preproduction/users/remove?key=" + userKey)
+                .method("POST", body)
+                .build();
+        client.newCall(request).execute();
+    }
+
+    public static JsonObject uploadPhoto(String userKey) throws IOException {
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("type", "photo")
+                .addFormDataPart("file", "cube.jpeg", RequestBody.create(mediaType, new File("src/cube.jpeg")))
+                .addFormDataPart("is_public", "1")
+                .addFormDataPart("tags", "#freetoedit")
+                .build();
+        Request request = new Request.Builder()
+                .url("https://api.picsart.com/preproduction/photos/add.json?key=" + userKey)
+                .method("POST", body)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("is_public", "1")
+                .build();
+        Response response = client.newCall(request).execute();
+        String jsonString = response.body().string();
+        return JsonParser.parseString(jsonString).getAsJsonObject();
+
+    }
+
+    public static JsonObject editPhoto(String userKey, String description, long id) throws IOException {
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType, "{\n\t\"tags\": \"" + description + "\"\n}");
+        Request request = new Request.Builder()
+                .url("https://api.picsart.com/preproduction/photos/update/" + id + ".json?key=" + userKey)
+                .method("POST", body)
+                .addHeader("Content-Type", "application/json")
+                .build();
+        Response response = client.newCall(request).execute();
+        String jsonString = response.body().string();
+        return JsonParser.parseString(jsonString).getAsJsonObject();
+
+    }
+
 
 }
